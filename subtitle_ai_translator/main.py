@@ -30,6 +30,31 @@ from transformers import AutoTokenizer, M2M100ForConditionalGeneration
 timestamp_pattern = re.compile(r'^\d{2}:\d{2}(?::\d{2})?\.\d{3} --> \d{2}:\d{2}(?::\d{2})?\.\d{3}')
 
 def translate_batch(text_batch, dest_lang, model, tokenizer):
+    """
+    Translates a batch of text into the specified destination language.
+
+    This function takes a list of text strings and the target language code, and uses the provided
+    model and tokenizer to generate the translations. The function handles the tokenization of the input text,
+    the generation of translated tokens, and the decoding of these tokens back into translated strings.
+
+    Args:
+        text_batch (list of str): A list of text strings to be translated.
+        dest_lang (str): The target language code to which the text should be translated.
+        model (transformers.PreTrainedModel): A pre-trained model from the `transformers` library.
+        tokenizer (transformers.PreTrainedTokenizer): A tokenizer that corresponds to the `model`.
+
+    Returns:
+        list of str: A list of translated text strings.
+
+    Example:
+        >>> model_name = 'facebook/m2m100_418M'
+        >>> model = M2M100ForConditionalGeneration.from_pretrained(model_name)
+        >>> tokenizer = AutoTokenizer.from_pretrained(model_name)
+        >>> text_batch = ["Hello, world!", "How are you?"]
+        >>> dest_lang = 'fr'
+        >>> translate_batch(text_batch, dest_lang, model, tokenizer)
+        ['Bonjour, monde !', 'Comment ça va ?']
+    """
     model_inputs = tokenizer(text_batch, return_tensors="pt", padding=True, truncation=True, max_length=512)
     gen_tokens = model.generate(**model_inputs, forced_bos_token_id=tokenizer.get_lang_id(dest_lang))
     translations = tokenizer.batch_decode(gen_tokens, skip_special_tokens=True)
