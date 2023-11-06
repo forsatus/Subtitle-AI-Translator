@@ -35,7 +35,33 @@ these are installed in your Python environment before running the script.
 """
 import argparse
 import re
+from dataclasses import dataclass
 from transformers import AutoTokenizer, M2M100ForConditionalGeneration
+
+@dataclass
+class TranslatorConfig:
+    """
+    Configuration class for subtitle translation tasks.
+
+    Attributes:
+        model (M2M100ForConditionalGeneration): A pre-trained M2M100 model from
+            Hugging Face's transformers library for machine translation.
+        tokenizer (AutoTokenizer): Corresponds to the M2M100 model and is used
+            for converting input text into a format suitable for the model.
+        batch_size (int): Number of subtitle entries to process in a batch for
+            efficient translation, reducing model calls. Default is 10.
+
+    Example:
+        >>> model = M2M100ForConditionalGeneration.from_pretrained(
+        ...     'facebook/m2m100_418M')
+        >>> tokenizer = AutoTokenizer.from_pretrained('facebook/m2m100_418M')
+        >>> config = TranslatorConfig(model=model, tokenizer=tokenizer,
+        ...                           batch_size=10)
+    """
+
+    model: M2M100ForConditionalGeneration
+    tokenizer: AutoTokenizer
+    batch_size: int = 10
 
 # Compile the regex pattern once
 timestamp_pattern = re.compile(
@@ -82,12 +108,10 @@ def translate_batch(text_batch, dest_lang, model, tokenizer):
 
 
 def extract_and_translate_from_vtt(
-    file_path,
-    output_path,
-    language,
-    model,
-    tokenizer,
-    batch_size=10
+    file_path: str,
+    output_path: str,
+    language: str,
+    config: TranslatorConfig
 ):
     """
     Extracts text from a VTT file, translates it, and writes to a new VTT file.
@@ -129,16 +153,16 @@ def extract_and_translate_from_vtt(
                 # If we have a batch ready, translate it before writing the timestamp
                 if subtitle_batch:
                     translations = translate_batch(
-                        subtitle_batch, language, model, tokenizer)
+                        subtitle_batch, language, config.model, config.tokenizer)
                     for translation in translations:
                         out_file.write(translation + '\n')
                     subtitle_batch = []  # Reset the batch
                 out_file.write(line)
             else:
                 subtitle_batch.append(line.strip())
-                if len(subtitle_batch) == batch_size:
+                if len(subtitle_batch) == config.batch_size:
                     translations = translate_batch(
-                        subtitle_batch, language, model, tokenizer)
+                        subtitle_batch, language, config.model, config.tokenizer)
                     for translation in translations:
                         out_file.write(translation + '\n')
                     subtitle_batch = []  # Reset the batch
@@ -146,7 +170,7 @@ def extract_and_translate_from_vtt(
         # Handle the last batch
         if subtitle_batch:
             translations = translate_batch(
-                subtitle_batch, language, model, tokenizer)
+                subtitle_batch, language, config.model, config.tokenizer)
             for translation in translations:
                 out_file.write(translation + '\n')
 
@@ -189,8 +213,8 @@ def main():
     model = M2M100ForConditionalGeneration.from_pretrained(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-    extract_and_translate_from_vtt(
-        args.source, args.destination, args.language, model, tokenizer)
+    aiConfig = TranslatorConfig(model=model, tokenizer=tokenizer, batch_size=10)
+    extract_and_translate_from_vtt(args.source, args.destination, args.language, aiConfig)
 
 
 if __name__ == "__main__":
