@@ -214,7 +214,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     ai_config = TranslatorConfig(model=model, tokenizer=tokenizer, batch_size=10)
-    extract_and_translate_from_vtt(args.source, args.destination, args.language, aiConfig)
+    extract_and_translate_from_vtt(args.source, args.destination, args.language, ai_config)
 
 
 if __name__ == "__main__":
