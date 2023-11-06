@@ -61,6 +61,32 @@ def translate_batch(text_batch, dest_lang, model, tokenizer):
     return translations
 
 def extract_and_translate_from_vtt(file_path, output_path, language, model, tokenizer, batch_size=10):
+    """
+    Extracts text from a VTT file, translates it to the specified language, and writes the translated text to a new VTT file.
+
+    This function reads a VTT subtitle file, extracts the dialogue lines while preserving timestamps and any formatting, 
+    and uses the provided translation model to translate the text in batches. The translated text is then written to 
+    the specified output file, maintaining the original timing and structure of the VTT file.
+
+    Args:
+        file_path (str): The file path for the input VTT subtitle file.
+        output_path (str): The file path where the translated VTT subtitle file will be saved.
+        language (str): The target language code for the translation (e.g., 'en' for English, 'es' for Spanish).
+        model (transformers.PreTrainedModel): A pre-trained translation model from the `transformers` library.
+        tokenizer (transformers.PreTrainedTokenizer): The tokenizer corresponding to the translation model.
+        batch_size (int, optional): The number of lines to translate at once. Defaults to 10.
+
+    Example:
+        >>> file_path = 'subtitles.vtt'
+        >>> output_path = 'translated_subtitles.vtt'
+        >>> language = 'es'
+        >>> model_name = 'facebook/m2m100_418M'
+        >>> model = M2M100ForConditionalGeneration.from_pretrained(model_name)
+        >>> tokenizer = AutoTokenizer.from_pretrained(model_name)
+        >>> extract_and_translate_from_vtt(file_path, output_path, language, model, tokenizer, batch_size=10)
+
+    The resulting file will contain the translated subtitles with the same timestamps as the original file.
+    """
     subtitle_batch = []
 
     with open(file_path, 'r', encoding='utf-8') as vtt_file, open(output_path, 'w', encoding='utf-8') as out_file:
@@ -88,6 +114,27 @@ def extract_and_translate_from_vtt(file_path, output_path, language, model, toke
                 out_file.write(translation + '\n')
 
 def main():
+    """
+    The main entry point for the script when used as a command-line tool.
+
+    This function parses command-line arguments for the source VTT file, the destination file path, 
+    and the target language code. It then initializes the translation model and tokenizer and 
+    calls the function to extract and translate text from the VTT file.
+
+    The script expects three command-line arguments:
+    - The path to the source subtitle file in VTT format that needs to be translated.
+    - The path where the translated VTT subtitle file should be saved.
+    - The target language code for translation (e.g., 'en' for English, 'es' for Spanish).
+
+    The script uses the M2M100 model from the Hugging Face transformers library for translation.
+
+    Usage:
+        Run the script from the command line with the required arguments.
+        Example command:
+        python script_name.py source.vtt destination.vtt es
+
+    This will translate the 'source.vtt' subtitle file to Spanish and save the result in 'destination.vtt'.
+    """
     parser = argparse.ArgumentParser(description='Translate VTT files using batch processing.')
     parser.add_argument('source', help='The source subtitle file to translate.')
     parser.add_argument('destination', help='The subtitle file where to save the translation.')
