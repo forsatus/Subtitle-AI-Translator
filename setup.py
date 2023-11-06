@@ -45,7 +45,8 @@ setup(
     name='subtitle-ai-translator',
     version='1.0',
     packages=find_packages(),
-    description='AI-powered tool for seamless subtitle translation, enabling cross-language accessibility for video content.',
+    description=('AI-powered tool for seamless subtitle translation, enabling '
+                 'cross-language accessibility for video content.'),
     long_description=open('README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     author='sutasrof',
