@@ -1,4 +1,28 @@
-﻿import argparse
+﻿"""
+This script is designed to translate subtitle files in the VTT (WebVTT) format using AI-powered translation.
+
+Utilizing the M2M100 model from Hugging Face's transformers library, the script is capable of translating subtitle text from the source language to a specified target language. The script supports batch processing to enhance the efficiency of translation by processing multiple subtitle lines simultaneously.
+
+Subtitle lines that contain timestamps or are empty are preserved as is, while subtitle text is translated and reinserted with the appropriate timestamps.
+
+The script is intended to be called from the command line with the following arguments:
+- source: the path to the source subtitle file to be translated.
+- destination: the path to the subtitle file where the translation should be saved.
+- language: the target language code for the translation.
+
+A pre-trained model and tokenizer are used to perform the translation, which are specified within the script. The user has the option to change the model by altering the `model_name` variable.
+
+Usage:
+    python script_name.py source.vtt destination.vtt target_language_code
+
+Example:
+    python script_name.py subtitles.vtt translated_subtitles.vtt es
+
+The script also includes functions that can be integrated into other Python modules if subtitle translation capabilities are required elsewhere.
+
+Note: This script requires the 'transformers' and 'regex' libraries. Ensure these are installed in your Python environment before running the script.
+"""
+import argparse
 import re
 from transformers import AutoTokenizer, M2M100ForConditionalGeneration
 
