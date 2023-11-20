@@ -1,45 +1,48 @@
-# XLIFF AI Translator
 
-XLIFF AI Translator is an AI-powered tool designed to translate XLIFF files, enhancing content accessibility across different languages. This application utilizes advanced machine learning models to offer precise and context-aware translations, ensuring seamless localization of digital content.
+# Subtitle-AI-Translator
+
+Subtitle-AI-Translator is an AI-powered application designed to automatically translate video subtitles, making content accessible across different languages and cultures. This tool leverages advanced machine learning models to provide accurate and context-aware translations, ensuring that your video content is enjoyed by a broader audience without language barriers.
 
 ## Features
 
-- **Automated Translation**: Efficiently translates XLIFF files from one language to another, supporting multiple languages.
-- **AI Integration**: Employs cutting-edge AI translation models for accurate file translation.
-- **Customizable Workflow**: Adaptable to specific translation needs and preferences.
-- **Batch Processing Capability**: Allows translation of multiple files at once, optimizing productivity.
-- **User-Oriented Design**: Simple and accessible, suitable for both technical and non-technical users.
+- **Automated Translation**: Quickly translate subtitles from one language to another with support for multiple languages.
+- **AI Integration**: Utilizes state-of-the-art AI translation models for high-quality subtitle translation.
+- **Customizable**: Easy to tailor the translation process to fit specific needs or preferences.
+- **Batch Processing**: Translate entire subtitle files in one go, saving time and effort.
+- **User-Friendly**: Designed with simplicity in mind, making it accessible for both technical and non-technical users.
 
 ## Installation
 
-### Using pip
+There are two main methods to install Subtitle-AI-Translator: using pip, or installing from source. Below are the instructions for both methods.
 
-To install XLIFF AI Translator, execute the following command:
+### Installing with pip
+
+To install Subtitle-AI-Translator using pip, simply run the following command in your terminal:
 
 ```
-pip install xliff-ai-translator
+pip install subtitle-ai-translator
 ```
 
-This command installs the latest version along with its dependencies.
+This will download and install the latest version of Subtitle-AI-Translator along with its dependencies.
 
 ### Installing from Source
 
-Alternatively, install from source with these commands:
+If you prefer to install from the source, you can clone the repository and install it manually:
 
 ```
-git clone https://github.com/sutasrof/xliff-ai-translator.git
-cd xliff-ai-translator
+git clone https://github.com/sutasrof/Subtitle-AI-Translator.git
+cd Subtitle-AI-Translator
 pip install .
 ```
 
-These steps clone the repository and install the package with its required dependencies.
+This sequence of commands will clone the repository to your local machine, navigate into the project directory, and install the package along with its required dependencies.
 
 ## Usage
 
-Run XLIFF AI Translator from the command line. Here's a basic example:
+After installation, you can use Subtitle-AI-Translator from the command line. Here is a basic example of how to use the tool to translate a subtitle file:
 
 ```
-xliff-ai-translator source.xliff destination.xliff target_language_code
+subtitle_ai_translator source.vtt destination.vtt target_language_code
 ```
 
-Replace `source.xliff` with your original file path, `destination.xliff` for the translated file path, and `target_language_code` with the desired language code (e.g., 'en' for English, 'fr' for French, etc.).
+Replace `source.vtt` with the path to your original subtitle file, `destination.vtt` with the path where you want the translated file to be saved, and `target_language_code` with the desired language code (e.g., `en` for English, `es` for Spanish, etc.).
